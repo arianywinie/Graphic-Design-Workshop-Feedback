@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Workshop Feedback</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF6EF;
+    --paper-raised: #F3EDE1;
+    --ink: #2B2420;
+    --ink-soft: #6B6156;
+    --brass: #A9803F;
+    --brass-deep: #8A6A34;
+    --line: #DCD3C2;
+    --moss: #6E7D5E;
+    color-scheme: light dark;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #201C18;
+      --paper-raised: #2A2521;
+      --ink: #EFE8DC;
+      --ink-soft: #B3A99B;
+      --brass: #D2A968;
+      --brass-deep: #E3BC80;
+      --line: #423C34;
+      --moss: #9CAE87;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #201C18;
+    --paper-raised: #2A2521;
+    --ink: #EFE8DC;
+    --ink-soft: #B3A99B;
+    --brass: #D2A968;
+    --brass-deep: #E3BC80;
+    --line: #423C34;
+    --moss: #9CAE87;
+  }
+  * { box-sizing: inherit; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 48px 20px 64px;
+  }
+  .sheet {
+    width: 100%;
+    max-width: 560px;
+  }
+  header.hero {
+    margin-bottom: 36px;
+  }
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(28px, 6vw, 38px);
+    line-height: 1.15;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+  .kicker {
+    font-size: 14px;
+    color: var(--brass-deep);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .lede {
+    max-width: 46ch;
+    color: var(--ink-soft);
+    font-size: 15.5px;
+    margin: 0;
+  }
+  hr.rule {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 28px 0 32px;
+  }
+  .field {
+    margin-bottom: 30px;
+  }
+  .field > label.qlabel {
+    display: block;
+    font-weight: 600;
+    font-size: 15.5px;
+    margin-bottom: 4px;
+  }
+  .field .hint {
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    margin-bottom: 12px;
+  }
+  .scale {
+    display: flex;
+    gap: 8px;
+  }
+  .scale button {
+    flex: 1;
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease, color .15s ease;
+  }
+  .scale button:hover { border-color: var(--brass); }
+  .scale button.selected {
+    background: var(--brass);
+    border-color: var(--brass);
+    color: #FFFDF8;
+  }
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    color: var(--ink);
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color .15s ease, background .15s ease, color .15s ease;
+  }
+  .chip:hover { border-color: var(--brass); }
+  .chip.selected {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  input[type="text"], textarea {
+    width: 100%;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    resize: vertical;
+  }
+  input[type="text"]:focus, textarea:focus {
+    outline: 2px solid var(--brass);
+    outline-offset: 1px;
+  }
+  textarea { min-height: 88px; }
+  .segmented {
+    display: flex;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .segmented button {
+    flex: 1;
+    border: none;
+    background: var(--paper-raised);
+    color: var(--ink);
+    padding: 12px 8px;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border-right: 1px solid var(--line);
+  }
+  .segmented button:last-child { border-right: none; }
+  .segmented button.selected {
+    background: var(--moss);
+    color: #FFFDF8;
+  }
+  .actions {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  button.primary, button.secondary {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    padding: 15px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  button.primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  button.primary:hover { background: var(--brass-deep); }
+  button.secondary {
+    background: transparent;
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  button.secondary:hover { border-color: var(--brass); }
+  .status {
+    font-size: 13.5px;
+    color: var(--moss);
+    min-height: 18px;
+    margin-top: 2px;
+  }
+  .note {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 22px;
+    max-width: 48ch;
+  }
+  :focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="sheet">
+    <header class="hero">
+      <p class="kicker">Workshop feedback</p>
+      <h1>Tell us how it went</h1>
+      <p class="lede">A few quick questions about the graphic design workshop. Nothing here identifies you — answer as openly as you like.</p>
+    </header>
+
+    <hr class="rule" />
+
+    <form id="feedbackForm">
+      <div class="field">
+        <label class="qlabel">Overall, how valuable was the workshop?</label>
+        <div class="scale" id="ratingScale" role="radiogroup" aria-label="Rating from 1 to 5"></div>
+        <div class="scale-labels"><span>Not valuable</span><span>Extremely valuable</span></div>
+      </div>
+
+      <div class="field">
+        <label class="qlabel" for="session">Which session did you attend?</label>
+        <p class="hint">Optional — only if you went to more than one.</p>
+        <input type="text" id="session" placeholder="e.g. the layout & typography session" />
+      </div>
+
+      <div class="field">
+        <label class="qlabel">What was most useful to you?</label>
+        <p class="hint">Pick as many as apply.</p>
+        <div class="chips" id="usefulChips" role="group" aria-label="Most useful parts"></div>
+      </div>
+
+      <div class="field">
+        <label class="qlabel" for="improve">What would you improve?</label>
+        <textarea id="improve" placeholder="Pacing, content, materials, venue — anything at all"></textarea>
+      </div>
+
+      <div class="field">
+        <label class="qlabel">Would you attend another workshop like this?</label>
+        <div class="segmented" id="attendAgain" role="radiogroup" aria-label="Would attend again"></div>
+      </div>
+
+      <div class="field">
+        <label class="qlabel" for="other">Anything else you'd like to share?</label>
+        <p class="hint">Optional.</p>
+        <textarea id="other" placeholder="Anything that didn't fit above"></textarea>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="primary" id="sendBtn">Open email to send feedback</button>
+        <button type="button" class="secondary" id="copyBtn">Copy feedback text instead</button>
+        <div class="status" id="status" aria-live="polite"></div>
+      </div>
+
+      <p class="note">This opens a pre-filled email in your own mail app — review it and hit send. If nothing opens, use "Copy feedback text instead" and paste it into any email.</p>
+    </form>
+  </div>
+
+<script>
+  const RECIPIENT = "arianywinie@gmail.com";
+
+  let rating = null;
+  let useful = new Set();
+  let attend = null;
+
+  const scaleLabels = ["1", "2", "3", "4", "5"];
+  const scaleEl = document.getElementById("ratingScale");
+  scaleLabels.forEach((label, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = label;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.addEventListener("click", () => {
+      rating = i + 1;
+      [...scaleEl.children].forEach((b, j) => {
+        b.classList.toggle("selected", j === i);
+        b.setAttribute("aria-checked", j === i ? "true" : "false");
+      });
+    });
+    scaleEl.appendChild(btn);
+  });
+
+  const usefulOptions = [
+    "Design techniques",
+    "Hands-on practice",
+    "Q&A discussion",
+    "Handouts & resources",
+    "Instructor's approach",
+    "Something else"
+  ];
+  const chipsEl = document.getElementById("usefulChips");
+  usefulOptions.forEach(opt => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "chip";
+    chip.textContent = opt;
+    chip.setAttribute("aria-pressed", "false");
+    chip.addEventListener("click", () => {
+      if (useful.has(opt)) {
+        useful.delete(opt);
+        chip.classList.remove("selected");
+        chip.setAttribute("aria-pressed", "false");
+      } else {
+        useful.add(opt);
+        chip.classList.add("selected");
+        chip.setAttribute("aria-pressed", "true");
+      }
+    });
+    chipsEl.appendChild(chip);
+  });
+
+  const attendOptions = ["Yes", "Maybe", "No"];
+  const attendEl = document.getElementById("attendAgain");
+  attendOptions.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = opt;
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", "false");
+    btn.addEventListener("click", () => {
+      attend = opt;
+      [...attendEl.children].forEach(b => {
+        b.classList.toggle("selected", b === btn);
+        b.setAttribute("aria-checked", b === btn ? "true" : "false");
+      });
+    });
+    attendEl.appendChild(btn);
+  });
+
+  function buildFeedbackText() {
+    const session = document.getElementById("session").value.trim();
+    const improve = document.getElementById("improve").value.trim();
+    const other = document.getElementById("other").value.trim();
+
+    const lines = [];
+    lines.push("Workshop feedback (anonymous)");
+    lines.push("");
+    lines.push("Overall value (1-5): " + (rating ? rating : "not answered"));
+    if (session) lines.push("Session attended: " + session);
+    lines.push("Most useful: " + (useful.size ? [...useful].join(", ") : "not answered"));
+    lines.push("What to improve: " + (improve ? improve : "not answered"));
+    lines.push("Would attend again: " + (attend ? attend : "not answered"));
+    if (other) lines.push("Other comments: " + other);
+    return lines.join("\n");
+  }
+
+  const statusEl = document.getElementById("status");
+
+  document.getElementById("sendBtn").addEventListener("click", () => {
+    const body = buildFeedbackText();
+    const subject = "Workshop feedback";
+    const mailto = "mailto:" + encodeURIComponent(RECIPIENT) +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
+    window.location.href = mailto;
+    statusEl.textContent = "Your email app should be opening now — just review and hit send.";
+  });
+
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+    const text = buildFeedbackText();
+    try {
+      await navigator.clipboard.writeText(text);
+      statusEl.textContent = "Copied. Paste it into an email to " + RECIPIENT + ".";
+    } catch (e) {
+      statusEl.textContent = "Couldn't copy automatically — please select and copy the text yourself.";
+    }
+  });
+</script>
+</body>
+</html>
