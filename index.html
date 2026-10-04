@@ -196,6 +196,8 @@
     cursor: pointer;
     border-right: 1px solid var(--line);
   }
+  .segmented button .sess-date, .segmented button .sess-time { display: block; }
+  .segmented button .sess-time { font-weight: 400; font-size: 12.5px; margin-top: 3px; opacity: 0.9; }
   .segmented button:last-child { border-right: none; }
   .segmented button.selected {
     background: var(--moss);
@@ -252,7 +254,7 @@
     <header class="hero">
       <p class="kicker">Graphic Design Workshop Feedback</p>
       <h1>We would love to hear how it went!</h1>
-      <p class="lede">Thank you for joining the graphic design workshop. It only takes a couple of minutes to share your thoughts. Your feedback will be sent by email, so it will come from your email address. Please be as candid as you like, as it genuinely helps us shape future sessions.</p>
+      <p class="lede">Dear Colleagues,<br><br>Thank you for joining the graphic design workshop. It only takes a couple of minutes to share your thoughts. Your feedback will be sent by email, so it will come from your email address.<br><br>Feel free to be as open as you like, as it genuinely helps us shape future sessions.</p>
     </header>
 
     <hr class="rule" />
@@ -292,12 +294,13 @@
         <div class="status" id="status" aria-live="polite"></div>
       </div>
 
-      <p class="note">This will open a pre-filled email in your own mail app. Please take a quick look and press send. If nothing opens, choose "Copy my feedback instead" and paste it into an email to us. Thank you for your time!</p>
+      <p class="note">This will open a pre-filled email in your own mail app. Please take a quick look and press send. Thank you for your time!</p>
     </form>
   </div>
 
 <script>
-  const RECIPIENT = "arianywinie@gmail.com";
+  const RECIPIENT = "winie.ariany@accor.com";
+  const COPY_RECIPIENT = "winie.ariany@accor.com";
 
   let rating = null;
   let useful = new Set();
@@ -373,16 +376,26 @@
 
   const statusEl = document.getElementById("status");
   let session = null;
-  const sessionOptions = ["28 August 2026", "18 September 2026"];
+  const sessionOptions = [
+    { date: "28 August 2026", time: "2:00-4:00 PM" },
+    { date: "18 September 2026", time: "3:00-5:00 PM" }
+  ];
   const sessionEl = document.getElementById("sessionChoice");
   sessionOptions.forEach(opt => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.textContent = opt;
+    const dateEl = document.createElement("span");
+    dateEl.className = "sess-date";
+    dateEl.textContent = opt.date;
+    const timeEl = document.createElement("span");
+    timeEl.className = "sess-time";
+    timeEl.textContent = opt.time;
+    btn.appendChild(dateEl);
+    btn.appendChild(timeEl);
     btn.setAttribute("role", "radio");
     btn.setAttribute("aria-checked", "false");
     btn.addEventListener("click", () => {
-      session = opt;
+      session = opt.date + ", " + opt.time;
       sessionEl.classList.remove("invalid");
       statusEl.classList.remove("error");
       statusEl.textContent = "";
@@ -433,11 +446,12 @@
     const text = buildFeedbackText();
     try {
       await navigator.clipboard.writeText(text);
-      statusEl.textContent = "Copied. Paste it into an email to " + RECIPIENT + ".";
+      statusEl.textContent = "Copied. Paste it into an email to " + COPY_RECIPIENT + ".";
     } catch (e) {
       statusEl.textContent = "We couldn't copy it automatically. Please select and copy your answers manually.";
     }
   });
+
 </script>
 </body>
 </html>
